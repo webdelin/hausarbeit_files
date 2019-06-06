@@ -1,0 +1,11 @@
+{
+  "name": "hausarbeit_files",
+  "version": "1.0.0",
+  "description": "Систематизация файлов по папкам",
+  "main": "sort.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wendelin Gerein",
+  "license": "ISC"
+}
