@@ -2,46 +2,64 @@ const fs = require('fs')
 const path = require('path')
 const base = __dirname + '/rohfiles'
 const fileDir = __dirname + '/temp'
-const files = fs.readdirSync(base)
-
-const namesArray = 
-  [ "a", "a", "a", "b", "b", "c", "c", "c" ]
-;
-const names_array_new = namesArray.reduceRight(function (r, a) {
-  r.some(function (b) { return a === b; }) || r.push(a);
-  return r;
-}, []);
-
-const dla = JSON.stringify(names_array_new, 1, 2).toUpperCase();
-console.log(dla)
-
-if (!fs.existsSync(fileDir)) {
-  fs.mkdirSync(fileDir)
-} else {
-  fs.rmdir(fileDir, err => {
-    if(err){
-      console.log(err)
-    }
-  })
-  console.log('DELETE ' + fileDir + ' DONE')
-  fs.mkdirSync(fileDir)
-  console.log('CREATE ' + fileDir + ' DONE')
-}
 
 const readDir = (base, level) => {
   const files = fs.readdirSync(base);
   files.forEach(item => {
     let localBase = path.join(base, item);
     let state = fs.statSync(localBase);
+    
+
     if (state.isDirectory()) {
       console.log(' '.repeat(level) + 'DIR: ' + item);
       readDir(localBase, level + 1);
-      fs.mkdirSync(fileDir + '/'.repeat(level) + dla)
     } else {
       console.log(' '.repeat(level) + 'File: ' + item);
     }
   })
 }
 
-readDir(base, 0);
-console.log('BASE: ' + base)
+
+
+const writeDir = () => {
+  fs.readdir(base, (err, files) => {
+    if (err) {
+      console.log('Ошибка чтения каталога');
+    }
+    files.forEach((item) => {
+      let localBase = path.join(base, item)
+      let state = fs.statSync(localBase)
+      const dirsA = item[0].toUpperCase()
+      const dirsS = JSON.stringify(dirsA)
+      const dirsSt = dirsA.toString()
+      if (state.isDirectory()) {
+        console.log(item)
+        readDir(localBase)
+      } else {
+        if (!fs.existsSync(dirsA)) {
+          //fs.mkdirSync(fileDir)
+        }
+        
+        function removeDuplicates(arr){
+          let unique_array = []
+          for(let i = 0;i < arr.length; i++){
+              if(unique_array.indexOf(arr[i]) == -1){
+                  unique_array.push(arr[i])
+              }
+          }
+          return unique_array
+      }
+      
+      console.log(removeDuplicates(dirsA))
+      
+
+        //console.log('WRITE DIR: ' + item[0].toUpperCase())
+        console.log('WRITE DIR: ' + dirsSt);
+        
+      }
+    })
+  })
+}
+
+writeDir(base, 0);
+//readDir(base, 0);

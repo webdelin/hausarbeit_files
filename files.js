@@ -23,8 +23,11 @@ const readDir = (base, level) => {
       if (!fs.existsSync(fileDir)) {
         fs.mkdirSync(fileDir)
       }
+      var obj = dirsA;
+      var obj1 = JSON.parse(digit);
+      console.log(obj1.x); // 4
 for (index = 0; index <dirsA.length; ++index) {
-  console.log('digit[index]: ' + dirsA[index])
+  console.log('digit[index]' + dirsA[index])
 
  //fs.mkdirSync(fileDir + '/' + dirsA[index])
 }
@@ -35,13 +38,6 @@ for (index = 0; index <dirsA.length; ++index) {
         }
       })
     }
-    var names_array_new = dirsA.reduceRight(function (r, a) {
-      r.some(function (b) { return a === b; }) || r.push(a);
-      return r;
-    }, []);
-    
-    const dla = JSON.stringify(names_array_new, 0, 4);
-    console.log('AAAAA' + dla)
   })
 }
 readDir(base, 0)
