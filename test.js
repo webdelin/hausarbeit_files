@@ -30,8 +30,6 @@ const writeDir = () => {
       let localBase = path.join(base, item)
       let state = fs.statSync(localBase)
       const dirsA = item[0].toUpperCase()
-      const dirsS = JSON.stringify(dirsA)
-      const dirsSt = dirsA.toString()
       if (state.isDirectory()) {
         console.log(item)
         readDir(localBase)
@@ -39,40 +37,13 @@ const writeDir = () => {
         if (!fs.existsSync(dirsA)) {
           //fs.mkdirSync(fileDir)
         }
- 
-        function RemoveDuplValues(dupvaluearr) {
 
-          tempArr(dupvaluearr);
-  
-      }
-  
-      function tempArr(arr) {
-  
-          newArr = new Array();
-  
-          for (i = 0; i < arr.length; i++) {
-  
-              if (!duplValuescheck(newArr, arr[i])) {
-  
-                  newArr.length += 1;
-  
-                  newArr[newArr.length - 1] = arr[i];
-  
-              }
-  
-          }
-  
-          console.log(newArr);
-  
-      }
-  
-      for (i=0; i<dirsA.length; i++) {  
-        if (!newArray.includes(dirsA[i])) {
-            newArray.push(dirsA[i]); 
+        for (i=0; i<dirsA.length; i++) {
+          fs.mkdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
+            if (err) throw err;
+          });
+            console.log('MKDIR: ' + dirsA)
         }
-    }
-      console.log('WRITE DIR: ' + newArray)
-        
       }
     })
   })

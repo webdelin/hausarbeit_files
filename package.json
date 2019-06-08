@@ -9,6 +9,8 @@
   "author": "Wendelin Gerein",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.0.1",
+    "colors": "^1.3.3",
     "dree": "^2.1.6",
     "util": "^0.12.0"
   }
