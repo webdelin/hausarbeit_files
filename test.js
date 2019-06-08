@@ -39,22 +39,39 @@ const writeDir = () => {
         if (!fs.existsSync(dirsA)) {
           //fs.mkdirSync(fileDir)
         }
-        
-        function removeDuplicates(arr){
-          let unique_array = []
-          for(let i = 0;i < arr.length; i++){
-              if(unique_array.indexOf(arr[i]) == -1){
-                  unique_array.push(arr[i])
-              }
-          }
-          return unique_array
-      }
-      
-      console.log(removeDuplicates(dirsA))
-      
+ 
+        function RemoveDuplValues(dupvaluearr) {
 
-        //console.log('WRITE DIR: ' + item[0].toUpperCase())
-        console.log('WRITE DIR: ' + dirsSt);
+          tempArr(dupvaluearr);
+  
+      }
+  
+      function tempArr(arr) {
+  
+          newArr = new Array();
+  
+          for (i = 0; i < arr.length; i++) {
+  
+              if (!duplValuescheck(newArr, arr[i])) {
+  
+                  newArr.length += 1;
+  
+                  newArr[newArr.length - 1] = arr[i];
+  
+              }
+  
+          }
+  
+          console.log(newArr);
+  
+      }
+  
+      for (i=0; i<dirsA.length; i++) {  
+        if (!newArray.includes(dirsA[i])) {
+            newArray.push(dirsA[i]); 
+        }
+    }
+      console.log('WRITE DIR: ' + newArray)
         
       }
     })
