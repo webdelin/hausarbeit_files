@@ -34,16 +34,23 @@ const writeDir = () => {
         console.log(item)
         readDir(localBase)
       } else {
-        if (!fs.existsSync(dirsA)) {
-          //fs.mkdirSync(fileDir)
+        if (!fs.existsSync(fileDir)) {
+          for (i=0; i<dirsA.length; i++) {
+            fs.mkdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
+              if (err) throw err;
+            });
+              console.log('MKDIR: ' + dirsA)
+          }
+        } else {
+          console.log('DELETE: ' + dirsA)
+          for (i=0; i<dirsA.length; i++) {
+            fs.rmdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
+              if (err) throw err;
+            });
+              console.log('MKDIR: ' + dirsA)
+          }
         }
 
-        for (i=0; i<dirsA.length; i++) {
-          fs.mkdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
-            if (err) throw err;
-          });
-            console.log('MKDIR: ' + dirsA)
-        }
       }
     })
   })
