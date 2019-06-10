@@ -1,43 +1,54 @@
-const fs = require('fs')
-const path = require('path')
-const base = __dirname + '/rohfiles'
-const fileDir = __dirname + '/FILES'
-const files = fs.readdirSync(base)
+const fs = require('fs');
+const path = require('path');
 
+  const base = path.join(__dirname, './rohfiles');
+  const fileDir = path.join(__dirname, './temp');
 
-const readDir = (base, level) => {
-
-  files.forEach(item => {
-    let localBase = path.join(base, item)
-    const dirsA = item[0].toUpperCase()
-    let state = fs.statSync(localBase)
-    if (state.isDirectory()) {
-      console.log(' '.repeat(level) + 'DIR: ' + item)
-      readDir(localBase, level + 1)
-    } else {
-
-      let digit = JSON.stringify(dirsA)
-      console.log('INDEXOFF: ' + digit )
-      console.log('FILE: ' + item )
-      
-      if (!fs.existsSync(fileDir)) {
-        fs.mkdirSync(fileDir)
+  const writeDir = () => {
+    fs.readdir(base, (err, files) => {
+      if (err) {
+        console.log('Ошибка чтения каталога');
       }
-      var obj = dirsA;
-      var obj1 = JSON.parse(digit);
-      console.log(obj1.x); // 4
-for (index = 0; index <dirsA.length; ++index) {
-  console.log('digit[index]' + dirsA[index])
+      files.forEach((item) => {
+        let localBase = path.join(base, item)
+        let state = fs.statSync(localBase)
+        const dirsA = item[0].toUpperCase()
+        if (state.isDirectory()) {
+        } else {
+          if (!fs.existsSync(fileDir)) {
+            for (i=0; i<dirsA.length; i++) {
+              fs.mkdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
+                if (err) throw err;
+              });
+            }
+          } else {
 
- //fs.mkdirSync(fileDir + '/' + dirsA[index])
-}
-      fs.link(base + '/' + item,  fileDir + '/' + item, err => {
-        if (err) {
-          console.error(err.message)
-          return
+          }
+  
         }
       })
-    }
-  })
+    })
+  }
+  const writeFile = () => {
+    fs.readdir(base, function (err, files) {
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        } 
+        files.forEach(function (file) {
+            fs.link( base + '/' + file,  fileDir + '/' + file[0].toUpperCase() + '/' + file, err => {
+              
+              if (err) {
+                console.error(err.message)
+                return
+              }
+            })
+        });
+    });
+  
+  }
+let asyncTest = () => {
+  writeDir()
+  setTimeout(() => writeFile(), 2000)
 }
-readDir(base, 0)
+
+asyncTest();

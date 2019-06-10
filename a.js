@@ -32,7 +32,6 @@ const path = require('path');
                 console.log('MKDIR: ' + dirsA)
             }
           }
-  
         }
       })
     })
