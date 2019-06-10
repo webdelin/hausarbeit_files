@@ -60,6 +60,12 @@ const path = require('path');
   
   }
 
-    //writeDir()
+//writeDir()
 
-    writeFile()
+
+let asyncTest = () => {
+  writeDir()
+  setTimeout(() => writeFile(), 2000)
+}
+
+asyncTest();
