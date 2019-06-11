@@ -3,23 +3,6 @@ const path = require('path');
 const base = path.join(__dirname, './rohfiles');
 const fileDir = path.join(__dirname, './temp');
 
-
-  if (fs.existsSync(fileDir)) {
-    const Q = require('q')
-    function rmdir(dir) {
-      return Q.nfcall(fs.access, dir).then(() => {
-        return Q.nfcall(fs.readdir, dir)
-          .then(files => files.reduce((pre, f) => pre.then(() => {
-            var sub = path.join(dir, f)
-            return Q.nfcall(fs.lstat, sub).then(stat => {
-              if (stat.isDirectory()) return rmdir(sub)
-              return Q.nfcall(fs.unlink, sub)
-            })
-          }), Q()))
-      }, err => {})
-      .then(() => Q.nfcall(fs.rmdir, dir))
-    }
-  }
   const writeDir = () => {
     fs.readdir(base, (err, files) => {
       if (err) {
@@ -44,8 +27,12 @@ const fileDir = path.join(__dirname, './temp');
 
           }
         }
+        
       })
+      
     })
+    writeFile()
+
   }
   const writeFile = () => {
     fs.readdir(base, function (err, files) {
@@ -71,26 +58,27 @@ const fileDir = path.join(__dirname, './temp');
   
   }
 
-//writeDir()
 
-
-let asyncTest = () => {
-  rmdir(fileDir)
-  setTimeout(() => writeDir(), 1000)
-  setTimeout(() => writeFile(), 2000)
-}
-
-
-
-let getData = async () => {
-	try {
-			await writeDir();
-			await writeFile();
-		} catch (error) {
-			console.log(error);
-		}
-};
-
-
-asyncTest();
-//getData();
+  if (fs.existsSync(fileDir)) {
+    const Q = require('q')
+    function rmdir(dir) {
+      return Q.nfcall(fs.access, dir).then(() => {
+        return Q.nfcall(fs.readdir, dir)
+          .then(files => files.reduce((pre, f) => pre.then(() => {
+            var sub = path.join(dir, f)
+            return Q.nfcall(fs.lstat, sub).then(stat => {
+              if (stat.isDirectory()) return rmdir(sub)
+              return Q.nfcall(fs.unlink, sub)
+            })
+          }), Q()))
+      }, err => {})
+      .then(() => Q.nfcall(fs.rmdir, dir))
+    }
+    rmdir(fileDir)
+    
+  writeDir()
+    
+  }else {
+    
+  writeDir()
+  }
