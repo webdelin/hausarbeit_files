@@ -1,9 +1,25 @@
 const fs = require('fs');
 const path = require('path');
+const base = path.join(__dirname, './rohfiles');
+const fileDir = path.join(__dirname, './temp');
 
-  const base = path.join(__dirname, './rohfiles');
-  const fileDir = path.join(__dirname, './temp');
 
+  if (fs.existsSync(fileDir)) {
+    const Q = require('q')
+    function rmdir(dir) {
+      return Q.nfcall(fs.access, dir).then(() => {
+        return Q.nfcall(fs.readdir, dir)
+          .then(files => files.reduce((pre, f) => pre.then(() => {
+            var sub = path.join(dir, f)
+            return Q.nfcall(fs.lstat, sub).then(stat => {
+              if (stat.isDirectory()) return rmdir(sub)
+              return Q.nfcall(fs.unlink, sub)
+            })
+          }), Q()))
+      }, err => {})
+      .then(() => Q.nfcall(fs.rmdir, dir))
+    }
+  }
   const writeDir = () => {
     fs.readdir(base, (err, files) => {
       if (err) {
@@ -21,32 +37,27 @@ const path = require('path');
               fs.mkdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
                 if (err) throw err;
               });
-                console.log('MKDIR: ' + dirsA)
             }
           } else {
-            console.log('DELETE: ' + dirsA)
-            for (i=0; i<dirsA.length; i++) {
-              fs.rmdir(fileDir + '/' + dirsA, { recursive: true }, (err) => {
-                if (err) throw err;
-              });
-                console.log('MKDIR: ' + dirsA)
-            }
+
+            
+
           }
         }
       })
     })
   }
   const writeFile = () => {
-    //passsing directoryPath and callback function
     fs.readdir(base, function (err, files) {
-        //handling error
         if (err) {
             return console.log('Unable to scan directory: ' + err);
         } 
-        //listing all files using forEach
         files.forEach(function (file) {
-            // Do whatever you want to do with the file
+          let localBase = path.join(base, file)
+          let state = fs.statSync(localBase)
             console.log(file)
+            if (state.isDirectory()) {
+            } else {
             fs.link( base + '/' + file,  fileDir + '/' + file[0].toUpperCase() + '/' + file, err => {
               console.log('FILE: ' + fileDir + '/' + file[0].toUpperCase() + '/' + file)
               if (err) {
@@ -54,6 +65,7 @@ const path = require('path');
                 return
               }
             })
+          }
         });
     });
   
@@ -63,8 +75,22 @@ const path = require('path');
 
 
 let asyncTest = () => {
-  writeDir()
+  rmdir(fileDir)
+  setTimeout(() => writeDir(), 1000)
   setTimeout(() => writeFile(), 2000)
 }
 
+
+
+let getData = async () => {
+	try {
+			await writeDir();
+			await writeFile();
+		} catch (error) {
+			console.log(error);
+		}
+};
+
+
 asyncTest();
+//getData();
