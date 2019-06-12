@@ -3,7 +3,6 @@ const path = require('path')
 const base = path.join(__dirname, './rohfiles')
 const fileDir = path.join(__dirname, './temp')
 
-
 const writeDir = () => {
   new Promise((resolve, reject) => {
   fs.readdir(base, (err, files) => {
@@ -64,4 +63,23 @@ const writeFile = () => {
      await writeDir()
   }
   
+  if (fs.existsSync(fileDir)) {
+    const Q = require('q')
+    function rmdir(dir) {
+      return Q.nfcall(fs.access, dir).then(() => {
+        return Q.nfcall(fs.readdir, dir)
+          .then(files => files.reduce((pre, f) => pre.then(() => {
+            var sub = path.join(dir, f)
+            return Q.nfcall(fs.lstat, sub).then(stat => {
+              if (stat.isDirectory()) return rmdir(sub)
+              return Q.nfcall(fs.unlink, sub)
+            })
+          }), Q()))
+      }, err => {})
+      .then(() => Q.nfcall(fs.rmdir, dir))
+    }
+    rmdir(fileDir)
+    
+  } else {
   run()
+  }
