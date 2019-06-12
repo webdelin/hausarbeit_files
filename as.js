@@ -20,8 +20,8 @@ const writeDir = () => {
         if (!fs.existsSync(dirExFix)) {
           for (i=0; i<dirExFix.length; i++) {
             fs.mkdir(fileDir + '/' + dirsA + '/' + dirExFix, { recursive: true }, (err) => {
-              if (err) throw err;
-
+              if (err) reject(err)
+              else resolve(writeFile())
             })
           }
         }
@@ -30,7 +30,6 @@ const writeDir = () => {
   })
 })
 }
-
 
 const writeFile = () => {
   new Promise((resolve, reject) => {
@@ -43,13 +42,12 @@ const writeFile = () => {
           let state = fs.statSync(localBase)
           const dirsEx = path.parse(file.toUpperCase()).ext
           const dirExFix = dirsEx.replace('.', '')
-          if(base + '/' + file,  fileDir + '/' + file[0].toUpperCase() + '/' + dirExFix + '/' + file){
-            fs.link( base + '/' + file,  fileDir + '/' + file[0].toUpperCase() + '/' + dirExFix + '/' + file, err => {
-             // console.log('FILE: ' + fileDir + '/' + file[0].toUpperCase() + '/' + file)
-              if (err) {
-                console.error(err.message)
-                return
-              }
+          const exact = fileDir + '/' + file[0].toUpperCase() + '/' + dirExFix + '/' + file
+          if (!fs.existsSync(exact)) {
+            fs.link( base + '/' + file,  exact, err => {
+             //console.log('FILE: ' + fileDir + '/' + file[0].toUpperCase() + '/' + file)
+             if (err) reject(err)
+             else resolve()
             })
           }
         })
