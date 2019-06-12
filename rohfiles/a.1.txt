@@ -1,0 +1,58 @@
+      fs.unlink(fileDir + '/' + item, err => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      
+        fs.unlinkSync(fileDir + '/' + item);
+      
+        fs.rmdir(fileDir, err => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log('Delete done!');
+        });
+      });
+
+
+
+          files.forEach(item => {
+      let localBase = path.join(base, item)
+      let state = fs.statSync(localBase)
+      if (state.isDirectory()) {
+        console.log(' '.repeat(level) + 'DIR: ' + item)
+        readDir(localBase, level + 1)
+      } else {
+        if (!fs.existsSync(fileDir)) {
+          fs.mkdirSync(fileDir)
+        }
+        console.log(' '.repeat(level) + 'File: ' + item)
+        console.log('INDEXOFF '.repeat(level) + 'File: ' + item.indexOf())
+        fs.link(base + '/' + item,  fileDir + '/' + item, err => {
+          if (err) {
+            console.error(err.message)
+            return
+          }
+        })
+      }
+    })
+
+
+
+          fs.unlink(fileDir + '/' + item, err => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      
+        fs.unlinkSync(fileDir + '/' + item);
+      
+        fs.rmdir(fileDir, err => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log('Delete done!');
+        });
+      });

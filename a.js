@@ -3,6 +3,7 @@ const path = require('path');
 const base = path.join(__dirname, './rohfiles');
 const fileDir = path.join(__dirname, './temp');
 
+
   const writeDir = () => {
     fs.readdir(base, (err, files) => {
       if (err) {
@@ -29,9 +30,7 @@ const fileDir = path.join(__dirname, './temp');
         }
         
       })
-      
     })
-    writeFile()
 
   }
   const writeFile = () => {
@@ -57,8 +56,14 @@ const fileDir = path.join(__dirname, './temp');
     });
   
   }
-
-
+  let getData = async () => {
+    try {
+        await writeDir();
+        await writeFile();
+      } catch (error) {
+        console.log(error);
+      }
+  };
   if (fs.existsSync(fileDir)) {
     const Q = require('q')
     function rmdir(dir) {
@@ -75,10 +80,11 @@ const fileDir = path.join(__dirname, './temp');
       .then(() => Q.nfcall(fs.rmdir, dir))
     }
     rmdir(fileDir)
-    
-  writeDir()
+    getData()
     
   }else {
-    
-  writeDir()
+    getData()
   }
+
+
+
