@@ -50,14 +50,15 @@ const writeFile = () => {
             } 
             })
           }
+      
         })
     })
   }
 
   const getProducts = async () => {
-    const item = await writeDir()
+    await writeDir()
   
-    return await writeFile()
+    await writeFile()
   }
   
   getProducts()
