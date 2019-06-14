@@ -4,7 +4,8 @@
   "description": "Систематизация файлов по папкам",
   "main": "sort.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Wendelin Gerein",
   "license": "ISC",
