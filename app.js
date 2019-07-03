@@ -1,12 +1,22 @@
-var http = require('http'),
-    fs = require('fs');
-
+const http = require('http');
+const fs = require('fs');
+const { Console } = console;
 
 fs.readFile('./index.html', function (err, html) {
     if (err) {
         throw err; 
     }       
-    http.createServer(function(request, response) {  
+    http.createServer(function(request, response) {
+        setInterval(() => getDateTime(), 1000) 
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        console.time('process');
+        setTimeout((() => {  
+            console.log('END: ' + new Date().toLocaleString('de-DE', { timeZone: 'UTC' }))
+            return process.exit(console.timeEnd('process'));
+            
+        }), 10000);
+          
         function getDateTime() {
 
             var date = new Date();
@@ -31,12 +41,7 @@ fs.readFile('./index.html', function (err, html) {
             console.log(year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec);
         
         }
-        setInterval(() => getDateTime(), 1000) 
-        response.writeHeader(200, {"Content-Type": "text/html"});  
-        response.write(html);  
-        response.end();  
-        setTimeout((function() {  
-            return process.exit(new Date().toUTCString);
-        }), 10000);
     }).listen(8080);
+
+
 });
