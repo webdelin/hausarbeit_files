@@ -1,5 +1,7 @@
-#npm i
+npm i
 
-#npm start
+npm start
 
 10sec timeout
+
+.env not working
